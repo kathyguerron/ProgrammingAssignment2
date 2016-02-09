@@ -45,3 +45,5 @@ cacheSolve <- function(A) {
         return(inv)
     }
 }
+
+## Returns the inverse of the function
