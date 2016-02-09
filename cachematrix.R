@@ -46,4 +46,4 @@ cacheSolve <- function(A) {
     }
 }
 
-## Returns the inverse of the function
+## Returns the inverse of the matrix
