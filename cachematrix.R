@@ -5,45 +5,56 @@
 ## of the function if possible to calculate (if det is different than 0)
 
 
-makeCacheMatrix <- function(x = matrix()) {
-  inv <- NULL
-  getx<-as.matrix(x)
-  ## I'm setting x as a matrix
-  det(getx)  
-    if (det(x)==0){
-      print("No Inverse")
-      break()
-      ## I'm breaking the function if the det is 0
+makeCacheMatrix <- function(matrixOriginal = matrix()) {
+     # I set where I will store the matrix inverse
+       matrixI <- NULL
+    
+      # Funtion to set the value of the matrix to invert
+        setMatrix <- function( y ) {
+              matrixOriginal <<- y
+              matrixI    <<- NULL
+           }
+      
+        # Here this function will return the Original matrix
+          getMatrix <- function () matrixOriginal
+        
+         # I create a function that sets the inverse of the matrix
+            setInv <- function (inverse)  matrixI <<- inverse
+          
+        # Function to get the inverse of the matrix
+             getInverse <- function ()  matrixI
+        
+                # Build the list to return
+               list(set = setMatrix, get = getMatrix, setinverse = setInverse, getinverse = getInverse)
+            }
+
+
+## Using the special "vector" created abouve, caluclate the inverse
+## of the given matrix. However, it first checks to see if we have
+## already done this calculation, and if we have return the cached result.
+## If there is no cached vaule, it inverts the matrix, stores the
+## value and returns the inverse
+
+  
+  cacheSolve <- function(x, ...) {
+          ## Return a matrix that is the inverse of 'x'
+         
+    ## Here I am checking if the inverse is already on the cache
+    ## matrix and it's getting it from there
+    
+          inversematrix <- x$getinverse()
+          if ( !is.null(inversematrix) ) {
+                message("Using cached value of inverse")
+                return(inversematrix)
           }
-  else {
-    inv<-solve(getx)
-    list(getx, inv)
-  }    
-}
-
-    ## I calculate the inverse if det is different than 0
-    ## I list the original matrix and the inverse
-  
-## This function will return the inverse of x if not returned
-## already by the previous function
-  
-
-cacheSolve <- function(A) {
-  x<-A
-  inv<-NULL
-  makeCacheMatrix(A)
-          ## Return a matrix that is the inverse of A if not done
-          ## if not already on makeCacheMatrix function
-    if(is.null(inv)) {
-      if(det(getx)==0){
-        print("Does not have inverse")
-        break
-      }
+    ## If it's not there then it will calculate by using the
+    ##function solve
       else{
-        inv<-solve(getx)
-      }
-        return(inv)
-    }
-}
-
-## Returns the inverse of the matrix
+        matrix <- x$get()
+        inversematrix <- solve(matrix)
+        x$setinverse(inversematrix)
+        
+        inversematrix
+        
+      } 
+              }
